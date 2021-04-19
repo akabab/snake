@@ -25,7 +25,7 @@ const grid = Array2d(GRID.ROWS, GRID.COLS, SYMBOL.GRID_TILE_EMPTY)
 
 const drawGrid = grid => {
   process.stdout.write('┌')
-  for (let col = 0; col < GRID.COLS; col++) {
+  for (let col = 0; col < GRID.COLS * 2; col++) {
     process.stdout.write('─')
   }
   process.stdout.write('┐')
@@ -37,6 +37,8 @@ const drawGrid = grid => {
 
     for (let col = 0; col < grid[row].length; col++) {
       process.stdout.write(grid[row][col])
+      process.stdout.write(' ')
+
     }
 
     process.stdout.write('│')
@@ -44,7 +46,7 @@ const drawGrid = grid => {
   }
 
   process.stdout.write('└')
-  for (let col = 0; col < GRID.COLS; col++) {
+  for (let col = 0; col < GRID.COLS * 2; col++) {
     process.stdout.write('─')
   }
   process.stdout.write('┘')
@@ -64,7 +66,7 @@ const snake = {
 }
 
 let score = 0
-let speed = 2
+let speed = 5
 let lastKeyPressed
 
 const onKeyPress = key => {
@@ -150,6 +152,6 @@ const update = deltaTime => {
 
 grid[2][6] = SYMBOL.APPLE
 
-Game.setFps(20)
+Game.setFps(30)
 Game.onKeyPress(onKeyPress)
 Game.loop(update)
