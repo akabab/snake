@@ -6,7 +6,6 @@ const Array2d = (rows, cols, fill = 0) => Array(rows).fill(0).map(_ => Array(col
 
 // const wait = ms => new Promise(_ => setTimeout(_, ms))
 
-
 const Game = require('./Game.js')
 
 // SNAKE
@@ -35,7 +34,6 @@ const player = {
 
 let speed = 2
 let lastKeyPressed
-
 
 const onKeyPress = key => {
   if (key.sequence === '+' || key.sequence === '=') { speed = speed + 1 <= 20 ? speed + 1 : speed }
