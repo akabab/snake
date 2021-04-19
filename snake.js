@@ -16,22 +16,40 @@ const GRID = {
 }
 
 const SYMBOL = {
-  SNAKE_BODY: 'x',
-  GRID_TILE_EMPTY: '.',
-  APPLE: 'o',
+  SNAKE_BODY: '◈',
+  GRID_TILE_EMPTY: ' ',
+  APPLE: '',
 }
-
-
 
 const grid = Array2d(GRID.ROWS, GRID.COLS, SYMBOL.GRID_TILE_EMPTY)
 
 const drawGrid = grid => {
+  process.stdout.write('┌')
+  for (let col = 0; col < GRID.COLS; col++) {
+    process.stdout.write('─')
+  }
+  process.stdout.write('┐')
+  process.stdout.write('\n')
+
+
   for (let row = 0; row < grid.length; row++) {
+    process.stdout.write('│')
+
     for (let col = 0; col < grid[row].length; col++) {
       process.stdout.write(grid[row][col])
     }
+
+    process.stdout.write('│')
     process.stdout.write('\n')
   }
+
+  process.stdout.write('└')
+  for (let col = 0; col < GRID.COLS; col++) {
+    process.stdout.write('─')
+  }
+  process.stdout.write('┘')
+  process.stdout.write('\n')
+
 }
 
 const snake = {
