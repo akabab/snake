@@ -21,7 +21,7 @@ const drawGrid = grid => {
   }
 }
 
-const player = {
+const snake = {
   positions: [
     { y: 2, x: 2}, // head
     { y: 2, x: 1},
@@ -38,10 +38,10 @@ let lastKeyPressed
 const onKeyPress = key => {
   if (key.sequence === '+' || key.sequence === '=') { speed = speed + 1 <= 20 ? speed + 1 : speed }
   if (key.sequence === '-' || key.sequence === '_') { speed = speed - 1 >= 1 ? speed - 1 : speed }
-  if (key.name === 'right') { player.direction = 'right' }
-  if (key.name === 'left') { player.direction = 'left' }
-  if (key.name === 'up') { player.direction = 'up' }
-  if (key.name === 'down') { player.direction = 'down' }
+  if (key.name === 'right') { snake.direction = 'right' }
+  if (key.name === 'left') { snake.direction = 'left' }
+  if (key.name === 'up') { snake.direction = 'up' }
+  if (key.name === 'down') { snake.direction = 'down' }
   if (key.name === 'd') { Game.setFps(Game.getFps() - 1) }
   if (key.name === 'f') { Game.setFps(Game.getFps() + 1) }
 
@@ -54,31 +54,35 @@ const update = deltaTime => {
   // code here
   console.clear()
 
-  // update player positions
+  // update snake positions
 
-  if (Date.now() - player.lastMove > 1000 / speed /* ms */) {
+  if (Date.now() - snake.lastMove > 1000 / speed /* ms */) {
 
-    if (player.direction === 'right') {
-      player.positions.unshift({ y: player.positions[0].y, x: player.positions[0].x + 1 })
-    }
-    if (player.direction === 'left') {
-      player.positions.unshift({ y: player.positions[0].y, x: player.positions[0].x - 1 })
-    }
-    if (player.direction === 'up') {
-      player.positions.unshift({ y: player.positions[0].y - 1, x: player.positions[0].x })
-    }
-    if (player.direction === 'down') {
-      player.positions.unshift({ y: player.positions[0].y + 1, x: player.positions[0].x })
+    let newPosition
+    switch (snake.direction) {
+      case 'right':
+        newPosition = { y: snake.positions[0].y, x: snake.positions[0].x + 1 }
+        break;
+      case 'left':
+        newPosition = { y: snake.positions[0].y, x: snake.positions[0].x - 1 }
+        break;
+      case 'up':
+        newPosition = { y: snake.positions[0].y - 1, x: snake.positions[0].x }
+        break;
+      case 'down':
+        newPosition = { y: snake.positions[0].y + 1, x: snake.positions[0].x }
+        break;
     }
 
-    const prevTail = player.positions.pop()
-    grid[prevTail.y][prevTail.x] = '.'
+    snake.positions.unshift(newPosition)
 
-    player.lastMove = Date.now()
+    }
+
+    snake.lastMove = Date.now()
   }
 
-  for (let pos of player.positions) {
-    grid[pos.y][pos.x] = player.c
+  for (let pos of snake.positions) {
+    grid[pos.y][pos.x] = snake.c
   }
 
   drawGrid(grid)
@@ -87,7 +91,7 @@ const update = deltaTime => {
 
   console.log('fps: ' + Game.getFps())
   console.log('Δ: ' + deltaTime)
-  console.log('dir: ' + player.direction)
+  console.log('dir: ' + snake.direction)
   console.log('speed: ' + speed)
   console.log(`lastKeyPressed: ${JSON.stringify(lastKeyPressed)}`)
 }
