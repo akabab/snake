@@ -10,6 +10,11 @@ const Game = require('./Game.js')
 
 // SNAKE
 
+const GRID = {
+  COLS: 20,
+  ROWS: 10,
+}
+
 const SYMBOL = {
   SNAKE_BODY: 'x',
   GRID_TILE_EMPTY: '.',
@@ -18,7 +23,7 @@ const SYMBOL = {
 
 
 
-const grid = Array2d(10, 20, SYMBOL.GRID_TILE_EMPTY)
+const grid = Array2d(GRID.ROWS, GRID.COLS, SYMBOL.GRID_TILE_EMPTY)
 
 const drawGrid = grid => {
   for (let row = 0; row < grid.length; row++) {
@@ -57,6 +62,12 @@ const onKeyPress = key => {
   lastKeyPressed = key
 }
 
+const getRandomApplePosition = () => {
+  const y = Math.floor(Math.random() * GRID.ROWS)
+  const x = Math.floor(Math.random() * GRID.COLS)
+
+  return { y, x }
+}
 
 const update = deltaTime => {
 
@@ -87,6 +98,10 @@ const update = deltaTime => {
 
     if (grid[newPosition.y][newPosition.x] === SYMBOL.APPLE) {
       score++
+
+      const newApplePosition = getRandomApplePosition()
+      // TODO: position should not collide with snake
+      grid[newApplePosition.y][newApplePosition.x] = SYMBOL.APPLE
     } else {
       const prevTail = snake.positions.pop()
       grid[prevTail.y][prevTail.x] = SYMBOL.GRID_TILE_EMPTY
@@ -114,7 +129,8 @@ const update = deltaTime => {
   console.log('===============LOGS===============')
 }
 
-grid[3][7] = SYMBOL.APPLE
+
+grid[2][6] = SYMBOL.APPLE
 
 Game.setFps(20)
 Game.onKeyPress(onKeyPress)
