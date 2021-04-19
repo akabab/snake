@@ -10,7 +10,15 @@ const Game = require('./Game.js')
 
 // SNAKE
 
-const grid = Array2d(10, 20, '.')
+const SYMBOL = {
+  SNAKE_BODY: 'x',
+  GRID_TILE_EMPTY: '.',
+  APPLE: 'o',
+}
+
+
+
+const grid = Array2d(10, 20, SYMBOL.GRID_TILE_EMPTY)
 
 const drawGrid = grid => {
   for (let row = 0; row < grid.length; row++) {
@@ -29,9 +37,10 @@ const snake = {
   ],
   lastMove: Date.now(),
   direction: 'right',
-  c: 'x'
+  c: SYMBOL.SNAKE_BODY
 }
 
+let score = 0
 let speed = 2
 let lastKeyPressed
 
@@ -76,6 +85,11 @@ const update = deltaTime => {
 
     snake.positions.unshift(newPosition)
 
+    if (grid[newPosition.y][newPosition.x] === SYMBOL.APPLE) {
+      score++
+    } else {
+      const prevTail = snake.positions.pop()
+      grid[prevTail.y][prevTail.x] = SYMBOL.GRID_TILE_EMPTY
     }
 
     snake.lastMove = Date.now()
@@ -85,16 +99,22 @@ const update = deltaTime => {
     grid[pos.y][pos.x] = snake.c
   }
 
+  console.log('score: ' + score)
+
   drawGrid(grid)
 
   // LOGS
 
+  console.log('===============LOGS===============')
   console.log('fps: ' + Game.getFps())
   console.log('Δ: ' + deltaTime)
   console.log('dir: ' + snake.direction)
   console.log('speed: ' + speed)
   console.log(`lastKeyPressed: ${JSON.stringify(lastKeyPressed)}`)
+  console.log('===============LOGS===============')
 }
+
+grid[3][7] = SYMBOL.APPLE
 
 Game.setFps(20)
 Game.onKeyPress(onKeyPress)
